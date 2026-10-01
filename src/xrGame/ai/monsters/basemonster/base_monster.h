@@ -526,6 +526,9 @@ public:
 	bool is_jumping();
 	virtual bool can_be_seen() const { return true; }
 
+	// n053: ask Lua for a proposed attack substate; returns u32(-1) when no subscriber or no proposal
+	u32 script_combat_substate();
+
 #ifdef DEBUG
 	bool							is_paused		() const;
 #endif

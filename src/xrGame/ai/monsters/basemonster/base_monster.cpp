@@ -1033,6 +1033,23 @@ bool CBaseMonster::is_jumping()
 	return m_com_manager.is_jumping();
 }
 
+u32 CBaseMonster::script_combat_substate()
+{
+	CEntityAlive* enemy = const_cast<CEntityAlive*>(EnemyMan.get_enemy());
+	if (!enemy) return u32(-1);
+
+	::luabind::functor<int> funct;
+	if (!ai().script_engine().functor("_G.CMonsterCombatAction", funct))
+		return u32(-1);
+
+	float dist = enemy->Position().distance_to(Position());
+	int danger_type = (int)EnemyMan.get_danger_type();
+	bool can_jump = ability_can_jump();
+
+	int proposed = funct(lua_game_object(), enemy->lua_game_object(), dist, danger_type, can_jump);
+	return (proposed < 0) ? u32(-1) : (u32)proposed;
+}
+
 void CBaseMonster::update_eyes_visibility()
 {
 	if (!m_left_eye_bone_name)
