@@ -449,6 +449,73 @@ void CControlManagerCustom::script_jump(const Fvector& position, float factor)
 	m_man->activate(ControlCom::eControlJump);
 }
 
+bool CControlManagerCustom::script_try_jump(const Fvector& position, float factor)
+{
+	// defer to a scheme owner, like the update_frame/update_schedule auto-invoke drivers do
+	if (m_object->GetScriptControl()) return false;
+	if (!m_man->check_start_conditions(ControlCom::eControlJump)) return false;
+	if (!m_object->check_start_conditions(ControlCom::eControlJump)) return false;
+
+	script_jump(position, factor);
+	return true;
+}
+
+bool CControlManagerCustom::script_try_rotation_jump()
+{
+	if (m_object->GetScriptControl()) return false;
+	if (m_rot_jump_data.empty()) return false;
+	if (!m_man->check_start_conditions(ControlCom::eControlRotationJump)) return false;
+	if (!m_object->check_start_conditions(ControlCom::eControlRotationJump)) return false;
+
+	m_man->capture(this, ControlCom::eControlRotationJump);
+
+	SControlRotationJumpData* ctrl_data = (SControlRotationJumpData *)m_man->data(
+		this, ControlCom::eControlRotationJump);
+	if (!ctrl_data)
+	{
+		m_man->release(this, ControlCom::eControlRotationJump);
+		return false;
+	}
+
+	(*ctrl_data) = m_rot_jump_data[Random.randI(m_rot_jump_data.size())];
+
+	m_man->activate(ControlCom::eControlRotationJump);
+	return true;
+}
+
+bool CControlManagerCustom::script_try_run_attack()
+{
+	if (m_object->GetScriptControl()) return false;
+	if (!m_man->check_start_conditions(ControlCom::eControlRunAttack)) return false;
+	if (!m_object->check_start_conditions(ControlCom::eControlRunAttack)) return false;
+
+	m_man->capture(this, ControlCom::eControlRunAttack);
+	m_man->activate(ControlCom::eControlRunAttack);
+	return true;
+}
+
+bool CControlManagerCustom::script_try_threaten()
+{
+	if (m_object->GetScriptControl()) return false;
+	if (!m_threaten_anim) return false;
+	if (!m_man->check_start_conditions(ControlCom::eControlThreaten)) return false;
+	if (!m_object->check_start_conditions(ControlCom::eControlThreaten)) return false;
+
+	m_man->capture(this, ControlCom::eControlThreaten);
+
+	SControlThreatenData* ctrl_data = (SControlThreatenData *)m_man->data(this, ControlCom::eControlThreaten);
+	if (!ctrl_data)
+	{
+		m_man->release(this, ControlCom::eControlThreaten);
+		return false;
+	}
+	ctrl_data->animation = m_threaten_anim;
+	ctrl_data->time = m_threaten_time;
+
+	m_man->activate(ControlCom::eControlThreaten);
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Services
 //////////////////////////////////////////////////////////////////////////
