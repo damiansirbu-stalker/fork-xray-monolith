@@ -451,6 +451,8 @@ void CControlManagerCustom::script_jump(const Fvector& position, float factor)
 
 bool CControlManagerCustom::script_try_jump(const Fvector& position, float factor)
 {
+	// species without the component never registered the control type: refuse, do not deref
+	if (!m_jump) return false;
 	// defer to a scheme owner, like the update_frame/update_schedule auto-invoke drivers do
 	if (m_object->GetScriptControl()) return false;
 	if (!m_man->check_start_conditions(ControlCom::eControlJump)) return false;
@@ -462,6 +464,7 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 
 bool CControlManagerCustom::script_try_rotation_jump()
 {
+	if (!m_rotation_jump) return false;
 	if (m_object->GetScriptControl()) return false;
 	if (m_rot_jump_data.empty()) return false;
 	if (!m_man->check_start_conditions(ControlCom::eControlRotationJump)) return false;
@@ -485,6 +488,7 @@ bool CControlManagerCustom::script_try_rotation_jump()
 
 bool CControlManagerCustom::script_try_run_attack()
 {
+	if (!m_run_attack) return false;
 	if (m_object->GetScriptControl()) return false;
 	if (!m_man->check_start_conditions(ControlCom::eControlRunAttack)) return false;
 	if (!m_object->check_start_conditions(ControlCom::eControlRunAttack)) return false;
@@ -496,6 +500,7 @@ bool CControlManagerCustom::script_try_run_attack()
 
 bool CControlManagerCustom::script_try_threaten()
 {
+	if (!m_threaten) return false;
 	if (m_object->GetScriptControl()) return false;
 	if (!m_threaten_anim) return false;
 	if (!m_man->check_start_conditions(ControlCom::eControlThreaten)) return false;
