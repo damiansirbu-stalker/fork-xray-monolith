@@ -455,8 +455,10 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 	if (!m_jump) return false;
 	// defer to a scheme owner, like the update_frame/update_schedule auto-invoke drivers do
 	if (m_object->GetScriptControl()) return false;
+	// control-level checks only: the monster-side gate is the FSM's own pacing policy (the chimera
+	// attack state vetoes foreign jumps via m_allow_jump) and the engine's scripted path skips it
+	// (CChimera::jump -> script_jump); a commanded jump is the caller's policy, not the FSM's
 	if (!m_man->check_start_conditions(ControlCom::eControlJump)) return false;
-	if (!m_object->check_start_conditions(ControlCom::eControlJump)) return false;
 
 	m_man->capture(this, ControlCom::eControlJump);
 
