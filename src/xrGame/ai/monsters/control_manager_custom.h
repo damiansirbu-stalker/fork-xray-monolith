@@ -91,7 +91,7 @@ public:
 	void script_release(ControlCom::EControlType type);
 
 	// checked invoke variants: false = refused (start conditions, missing data)
-	bool script_try_jump(const Fvector& position, float factor);
+	bool script_try_jump(const Fvector& position, float factor, bool skip_prepare);
 	bool script_try_rotation_jump();
 	bool script_try_run_attack();
 	bool script_try_threaten();

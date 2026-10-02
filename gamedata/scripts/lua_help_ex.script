@@ -807,7 +807,7 @@
 
         // CBaseMonster - maneuver invokes (n052). Lua commands a control component; the engine executes it.
         // Returns true if the component was captured and activated, false if refused: start conditions failed (e.g. a follower dog denies a jump at a non-elevated enemy), required data missing, or the monster is under script control (mob_capture / scheme logic) - the invokes always defer to a scheme owner.
-        bool try_monster_jump(Fvector position, float factor) // Jump toward a world position (the script_jump path, start-condition checked).
+        bool try_monster_jump(Fvector position, float factor, bool skip_prepare) // Jump toward a world position (the script_jump path, start-condition checked). skip_prepare = true launches without the crouch wind-up (SControlJumpData::ePrepareSkip): an untelegraphed pounce.
         bool try_monster_rotation_jump() // Start a rotation-jump from the loaded rotation-jump data (false if none loaded).
         bool try_monster_run_attack() // Start a run-attack.
         bool try_monster_threaten() // Start a threaten animation (false if no threaten data set).

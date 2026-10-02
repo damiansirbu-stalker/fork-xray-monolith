@@ -600,7 +600,7 @@ void CScriptGameObject::set_poltergeist_height_params(float height_min, float he
 	poltergeist->set_height_params(height_min, height_max, change_velocity, min_time_ms, max_time_ms);
 }
 
-bool CScriptGameObject::try_monster_jump(const Fvector& position, float factor)
+bool CScriptGameObject::try_monster_jump(const Fvector& position, float factor, bool skip_prepare)
 {
 	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
 	if (!monster)
@@ -609,7 +609,7 @@ bool CScriptGameObject::try_monster_jump(const Fvector& position, float factor)
 		                                "CBaseMonster : cannot access class member try_monster_jump!");
 		return false;
 	}
-	return monster->com_man().script_try_jump(position, factor);
+	return monster->com_man().script_try_jump(position, factor, skip_prepare);
 }
 
 bool CScriptGameObject::try_monster_rotation_jump()

@@ -890,7 +890,7 @@ public:
 	void set_poltergeist_height_params(float height_min, float height_max, float change_velocity,
 	                                   float min_time_ms, float max_time_ms);
 
-	bool try_monster_jump(const Fvector& position, float factor);
+	bool try_monster_jump(const Fvector& position, float factor, bool skip_prepare);
 	bool try_monster_rotation_jump();
 	bool try_monster_run_attack();
 	bool try_monster_threaten();
