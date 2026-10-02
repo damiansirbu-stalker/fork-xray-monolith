@@ -661,6 +661,8 @@ bool CScriptGameObject::monster_capture_control(int type)
 	if (monster->GetScriptControl())
 		return false;
 	ControlCom::EControlType control_type = (ControlCom::EControlType)type;
+	if (!monster->control().is_registered(control_type))
+		return false;
 	monster->com_man().script_capture(control_type);
 	return monster->control().get_capturer(control_type) == &monster->com_man();
 }
@@ -675,6 +677,8 @@ bool CScriptGameObject::monster_release_control(int type)
 		return false;
 	}
 	ControlCom::EControlType control_type = (ControlCom::EControlType)type;
+	if (!monster->control().is_registered(control_type))
+		return false;
 	monster->com_man().script_release(control_type);
 	return monster->control().get_capturer(control_type) != &monster->com_man();
 }
