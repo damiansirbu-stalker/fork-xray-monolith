@@ -449,7 +449,7 @@ void CControlManagerCustom::script_jump(const Fvector& position, float factor)
 	m_man->activate(ControlCom::eControlJump);
 }
 
-bool CControlManagerCustom::script_try_jump(const Fvector& position, float factor)
+bool CControlManagerCustom::script_try_jump(const Fvector& position, float factor, bool skip_prepare)
 {
 	// species without the component never registered the control type: refuse, do not deref
 	if (!m_jump) return false;
@@ -458,7 +458,22 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 	if (!m_man->check_start_conditions(ControlCom::eControlJump)) return false;
 	if (!m_object->check_start_conditions(ControlCom::eControlJump)) return false;
 
-	script_jump(position, factor);
+	m_man->capture(this, ControlCom::eControlJump);
+
+	SControlJumpData* ctrl_data = (SControlJumpData *)m_man->data(this, ControlCom::eControlJump);
+	if (!ctrl_data)
+	{
+		m_man->release(this, ControlCom::eControlJump);
+		return false;
+	}
+
+	ctrl_data->target_object = 0;
+	ctrl_data->target_position = position;
+	ctrl_data->force_factor = factor;
+	if (skip_prepare)
+		ctrl_data->flags.or(SControlJumpData::ePrepareSkip);
+
+	m_man->activate(ControlCom::eControlJump);
 	return true;
 }
 
