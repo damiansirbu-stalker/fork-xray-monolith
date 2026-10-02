@@ -475,6 +475,16 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 	if (skip_prepare)
 		ctrl_data->flags.or(SControlJumpData::ePrepareSkip);
 
+	// the in-flight hit test engages only against a target object (hit_test returns on null),
+	// so a commanded jump dealt no damage. Aim the test at the current enemy; eUseTargetPosition
+	// keeps the flight on the commanded point instead of retargeting to the object
+	CEntityAlive* enemy = const_cast<CEntityAlive*>(m_object->EnemyMan.get_enemy());
+	if (enemy)
+	{
+		ctrl_data->target_object = enemy;
+		ctrl_data->flags.or(SControlJumpData::eUseTargetPosition);
+	}
+
 	m_man->activate(ControlCom::eControlJump);
 	return true;
 }
