@@ -424,6 +424,21 @@ float CScriptGameObject::get_fire_influence()
 	return monster->get_fire_influence();
 }
 
+u32 CScriptGameObject::get_monster_cover_vertex(const Fvector& enemy_position, float min_dist, float max_dist)
+{
+	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
+	if (!monster || !monster->CoverMan)
+	{
+		ai().script_engine().script_log(ScriptStorage::eLuaMessageTypeError,
+		                                "CBaseMonster : cannot access class member get_monster_cover_vertex!");
+		return u32(-1);
+	}
+	const CCoverPoint* point = monster->CoverMan->find_cover(enemy_position, min_dist, max_dist);
+	if (!point)
+		return u32(-1);
+	return point->level_vertex_id();
+}
+
 void CScriptGameObject::set_monster_attack_dist(float min_dist, float max_dist)
 {
 	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
