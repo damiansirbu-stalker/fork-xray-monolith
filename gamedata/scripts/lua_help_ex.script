@@ -816,6 +816,10 @@
         bool monster_capture_control(number type) // Capture a ControlCom::EControlType for script control; true if this manager holds it after. Refuses under script control (a scheme owner holds the monster) and while a pure capture is in flight (an active jump owns the control stack; stealing movement or path mid-flight destabilizes it).
         bool monster_release_control(number type) // Release a ControlCom::EControlType; true if this manager no longer holds it. Never refused - a caller can always clean up its own capture.
 
+        // CBaseMonster - behavior levers. Both default to exact vanilla; not serialized, re-apply on net_spawn.
+        void set_monster_turn_factor(float factor) // Multiplies the monster's base-path heading speed (CControlDirectionBase::update_frame), so it re-faces a moving target faster or slower on the ground. 1 = vanilla, values <= 0 keep the current factor. The jump control's in-flight alignment is untouched.
+        void set_monster_melee_strike(string anim_left, string anim_right) // Arms the dormant rear-strike component (CControlMeleeJump, registered for every species but inert without motions): with the enemy in the dead-rear slice under 4m the monster spin-strikes left or right, rate-limited 500-1000ms. Pass the model's own strike motions; an unknown motion name stays invalid and the component keeps refusing. Damage comes from the motions' attack_params rows - a motion without a row deals the first row's numbers, so supply motions that have rows.
+
         // Stalker NPCs
         function get_enable_anomalies_pathfinding()
         function set_enable_anomalies_pathfinding(bool)

@@ -9,6 +9,7 @@
 #include "script_monster_hit_info.h"
 #include "ai/monsters/monster_home.h"
 #include "ai/monsters/control_animation_base.h"
+#include "ai/monsters/control_manager_custom.h"
 
 //////////////////////////////////////////////////////////////////////////
 // Burer
@@ -402,4 +403,17 @@ void CScriptGameObject::set_default_panic_threshold()
 {
 	CBaseMonster* monster = smart_cast<CBaseMonster *>(&object());
 	if (monster) monster->set_default_panic_threshold();
+}
+
+void CScriptGameObject::set_monster_turn_factor(float factor)
+{
+	CBaseMonster* monster = smart_cast<CBaseMonster *>(&object());
+	if (monster) monster->set_turn_speed_factor(factor);
+}
+
+void CScriptGameObject::set_monster_melee_strike(LPCSTR anim_left, LPCSTR anim_right)
+{
+	CBaseMonster* monster = smart_cast<CBaseMonster *>(&object());
+	if (!monster || !monster->Visual()) return;
+	monster->com_man().add_melee_jump_data(anim_left, anim_right);
 }

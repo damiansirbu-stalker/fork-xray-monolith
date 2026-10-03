@@ -362,6 +362,8 @@ public:
 	void berserk();
 	void set_custom_panic_threshold(float value);
 	void set_default_panic_threshold();
+	void set_monster_turn_factor(float factor);
+	void set_monster_melee_strike(LPCSTR anim_left, LPCSTR anim_right);
 
 	// CAI_Trader
 	void set_trader_global_anim(LPCSTR anim);
