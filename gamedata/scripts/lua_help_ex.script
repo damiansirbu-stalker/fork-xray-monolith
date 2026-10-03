@@ -804,12 +804,12 @@
         void set_poltergeist_height_params(float height_min, float height_max, float change_velocity, float min_time_ms, float max_time_ms) // Poltergeist only. Hover-height family.
 
         // CBaseMonster - maneuver invokes. Lua commands a control component; the engine executes it.
-        // Returns true if the component was captured and activated, false if refused: start conditions failed (e.g. a follower dog denies a jump at a non-elevated enemy), required data missing, or the monster is under script control (mob_capture / scheme logic) - the invokes always defer to a scheme owner.
+        // Returns true if the component was captured and activated, false if refused: start conditions failed, required data missing, or the monster is under script control (mob_capture / scheme logic) - the invokes always defer to a scheme owner. All but try_monster_jump also consult the monster FSM's own start gate (e.g. a follower dog denies a jump at a non-elevated enemy); the jump bypasses it, see its line.
         bool try_monster_jump(Fvector position, float factor, bool skip_prepare) // Jump toward a world position (the script_jump path). Bypasses the FSM's own jump pacing (e.g. the chimera attack state's m_allow_jump veto), like the engine's scripted CChimera::jump does - the command is the caller's policy. Refused while another jump is active or the manager is pure-captured. skip_prepare = true launches without the crouch wind-up (SControlJumpData::ePrepareSkip). The leap launches along the body axis.
         bool try_monster_rotation_jump() // Start a rotation-jump from the loaded rotation-jump data (false if none loaded).
         bool try_monster_run_attack() // Start a run-attack.
         bool try_monster_threaten() // Start a threaten animation (false if no threaten data set).
-        bool monster_capture_control(number type) // Capture a ControlCom::EControlType for script control; true if this manager holds it after. Refuses under script control (a scheme owner holds the monster).
+        bool monster_capture_control(number type) // Capture a ControlCom::EControlType for script control; true if this manager holds it after. Refuses under script control (a scheme owner holds the monster) and while a pure capture is in flight (an active jump owns the control stack; stealing movement or path mid-flight destabilizes it).
         bool monster_release_control(number type) // Release a ControlCom::EControlType; true if this manager no longer holds it. Never refused - a caller can always clean up its own capture.
 
         // Stalker NPCs

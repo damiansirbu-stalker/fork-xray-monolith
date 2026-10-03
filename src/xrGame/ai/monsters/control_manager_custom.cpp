@@ -469,8 +469,8 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 	ctrl_data->target_object = 0;
 	ctrl_data->target_position = position;
 	ctrl_data->force_factor = factor;
-	if (skip_prepare)
-		ctrl_data->flags.or(SControlJumpData::ePrepareSkip);
+	// the flag persists on the shared control data, so write both states, never only the set
+	ctrl_data->flags.set(SControlJumpData::ePrepareSkip, skip_prepare);
 
 	// hit_test needs a target_object; eUseTargetPosition keeps the flight on the commanded point
 	CEntityAlive* enemy = const_cast<CEntityAlive*>(m_object->EnemyMan.get_enemy());

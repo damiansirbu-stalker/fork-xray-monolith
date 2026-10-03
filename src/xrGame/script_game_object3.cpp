@@ -636,6 +636,9 @@ bool CScriptGameObject::monster_capture_control(int type)
 	// defer to a scheme owner (mob_capture / logic): never grab components from under it
 	if (monster->GetScriptControl())
 		return false;
+	// an active jump holds a pure capture; stealing a component mid-flight destabilizes it
+	if (monster->control().is_captured_pure())
+		return false;
 	ControlCom::EControlType control_type = (ControlCom::EControlType)type;
 	if (!monster->control().is_registered(control_type))
 		return false;

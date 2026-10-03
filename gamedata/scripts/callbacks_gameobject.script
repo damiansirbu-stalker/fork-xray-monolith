@@ -254,10 +254,10 @@ end
 -- start conditions pass, else the vanilla selection runs. Left at -1 = no proposal = exact vanilla.
 -- A proposed substate's check_start_conditions runs every selector tick (camp runs a cover search).
 AddScriptCallback("monster_on_combat_action")
-_G.CMonsterCombatAction = function(monster, enemy, dist, danger_type, can_jump)
+_G.CMonsterCombatAction = function(monster, enemy, dist, enemy_strength, can_jump)
 	local flags = { substate = -1 }
-	SendScriptCallback("monster_on_combat_action", monster, enemy, dist, danger_type, can_jump, flags)
-	return flags.substate
+	SendScriptCallback("monster_on_combat_action", monster, enemy, dist, enemy_strength, can_jump, flags)
+	return tonumber(flags.substate) or -1
 end
 
 --[[ 
