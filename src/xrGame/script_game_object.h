@@ -871,6 +871,7 @@ public:
 	float get_psy_influence();
 	float get_radiation_influence();
 	float get_fire_influence();
+	u32 get_monster_cover_vertex(const Fvector& enemy_position, float min_dist, float max_dist);
 
 	void set_monster_attack_dist(float min_dist, float max_dist);
 	void set_monster_jump_params(float min_dist, float max_dist, float max_angle, float max_height, float delay_ms);

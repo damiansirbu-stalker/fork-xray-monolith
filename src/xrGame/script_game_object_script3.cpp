@@ -87,6 +87,7 @@ class_<CScriptGameObject> script_register_game_object2(class_<CScriptGameObject>
 		.def("get_psy_influence", SAFE_WRAP(&CScriptGameObject::get_psy_influence))
 		.def("get_radiation_influence", SAFE_WRAP(&CScriptGameObject::get_radiation_influence))
 		.def("get_fire_influence", SAFE_WRAP(&CScriptGameObject::get_fire_influence))
+		.def("get_monster_cover_vertex", SAFE_WRAP(&CScriptGameObject::get_monster_cover_vertex))
 		.def("set_monster_attack_dist", SAFE_WRAP(&CScriptGameObject::set_monster_attack_dist))
 		.def("set_monster_jump_params", SAFE_WRAP(&CScriptGameObject::set_monster_jump_params))
 		.def("set_monster_aggressive", SAFE_WRAP(&CScriptGameObject::set_monster_aggressive))
