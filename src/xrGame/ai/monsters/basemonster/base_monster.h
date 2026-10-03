@@ -404,6 +404,14 @@ public:
 
 	void set_aggressive(bool val = true) { m_bAggressive = val; }
 
+	// script-set multiplier on the base-path heading speed; 1 = vanilla
+	float m_turn_speed_factor = 1.f;
+	float get_turn_speed_factor() const { return m_turn_speed_factor; }
+	void set_turn_speed_factor(float v)
+	{
+		if (v > 0.f) m_turn_speed_factor = v;
+	}
+
 	//---------------------------------------------------------------------------------------
 
 

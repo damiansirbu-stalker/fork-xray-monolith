@@ -92,6 +92,8 @@ CBaseMonster::CBaseMonster() : m_psy_aura(this, "psy"),
 
 	m_com_manager.add_ability(ControlCom::eControlSequencer);
 	m_com_manager.add_ability(ControlCom::eControlTripleAnimation);
+	// inert until a script supplies strike motions (check_melee_jump refuses empty data)
+	m_com_manager.add_ability(ControlCom::eControlMeleeJump);
 
 
 	m_anomaly_detector = xr_new<CAnomalyDetector>(this);
