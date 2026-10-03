@@ -221,18 +221,6 @@ int CScriptGameObject::get_monster_state()
 	return (int)monster->StateMan->get_state_type();
 }
 
-int CScriptGameObject::get_monster_danger_type()
-{
-	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
-	if (!monster)
-	{
-		ai().script_engine().script_log(ScriptStorage::eLuaMessageTypeError,
-		                                "CBaseMonster : cannot access class member get_monster_danger_type!");
-		return -1;
-	}
-	return (int)monster->EnemyMan.get_danger_type();
-}
-
 bool CScriptGameObject::is_monster_jumping()
 {
 	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
@@ -484,34 +472,6 @@ void CScriptGameObject::set_monster_aggressive(bool value)
 	monster->set_aggressive(value);
 }
 
-void CScriptGameObject::set_monster_fov(float fov)
-{
-	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
-	if (!monster)
-	{
-		ai().script_engine().script_log(ScriptStorage::eLuaMessageTypeError,
-		                                "CBaseMonster : cannot access class member set_monster_fov!");
-		return;
-	}
-	// engine VERIFY demands fov > 0 (CustomMonster.cpp); non-positive keeps the current value
-	if (fov > 0.f)
-		monster->set_fov(fov);
-}
-
-void CScriptGameObject::set_monster_range(float range)
-{
-	CBaseMonster* monster = smart_cast<CBaseMonster*>(&object());
-	if (!monster)
-	{
-		ai().script_engine().script_log(ScriptStorage::eLuaMessageTypeError,
-		                                "CBaseMonster : cannot access class member set_monster_range!");
-		return;
-	}
-	// engine VERIFY demands range > 1 (CustomMonster.cpp); values <= 1 keep the current value
-	if (range > 1.f)
-		monster->set_range(range);
-}
-
 void CScriptGameObject::set_chimera_attack_params(float attack_radius, float prepare_timeout_ms,
                                                   float attack_timeout_ms, int num_prepare_jumps,
                                                   int num_attack_jumps)
@@ -675,6 +635,9 @@ bool CScriptGameObject::monster_capture_control(int type)
 	}
 	// defer to a scheme owner (mob_capture / logic): never grab components from under it
 	if (monster->GetScriptControl())
+		return false;
+	// an active jump holds a pure capture; stealing a component mid-flight destabilizes it
+	if (monster->control().is_captured_pure())
 		return false;
 	ControlCom::EControlType control_type = (ControlCom::EControlType)type;
 	if (!monster->control().is_registered(control_type))

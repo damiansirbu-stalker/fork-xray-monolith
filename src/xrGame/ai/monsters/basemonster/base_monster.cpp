@@ -1043,10 +1043,10 @@ u32 CBaseMonster::script_combat_substate()
 		return u32(-1);
 
 	float dist = enemy->Position().distance_to(Position());
-	int danger_type = (int)EnemyMan.get_danger_type();
+	int enemy_strength = get_enemy_strength();
 	bool can_jump = ability_can_jump();
 
-	int proposed = funct(lua_game_object(), enemy->lua_game_object(), dist, danger_type, can_jump);
+	int proposed = funct(lua_game_object(), enemy->lua_game_object(), dist, enemy_strength, can_jump);
 	return (proposed < 0) ? u32(-1) : (u32)proposed;
 }
 

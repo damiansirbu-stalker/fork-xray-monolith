@@ -451,13 +451,10 @@ void CControlManagerCustom::script_jump(const Fvector& position, float factor)
 
 bool CControlManagerCustom::script_try_jump(const Fvector& position, float factor, bool skip_prepare)
 {
-	// species without the component never registered the control type: refuse, do not deref
 	if (!m_jump) return false;
-	// defer to a scheme owner, like the update_frame/update_schedule auto-invoke drivers do
+	// defer to a scheme owner (mob_capture / logic)
 	if (m_object->GetScriptControl()) return false;
-	// control-level checks only: the monster-side gate is the FSM's own pacing policy (the chimera
-	// attack state vetoes foreign jumps via m_allow_jump) and the engine's scripted path skips it
-	// (CChimera::jump -> script_jump); a commanded jump is the caller's policy, not the FSM's
+	// no monster-side gate: it is FSM pacing (chimera m_allow_jump), skipped by CChimera::jump -> script_jump too
 	if (!m_man->check_start_conditions(ControlCom::eControlJump)) return false;
 
 	m_man->capture(this, ControlCom::eControlJump);
@@ -472,12 +469,10 @@ bool CControlManagerCustom::script_try_jump(const Fvector& position, float facto
 	ctrl_data->target_object = 0;
 	ctrl_data->target_position = position;
 	ctrl_data->force_factor = factor;
-	if (skip_prepare)
-		ctrl_data->flags.or(SControlJumpData::ePrepareSkip);
+	// the flag persists on the shared control data, so write both states, never only the set
+	ctrl_data->flags.set(SControlJumpData::ePrepareSkip, skip_prepare);
 
-	// the in-flight hit test engages only against a target object (hit_test returns on null),
-	// so a commanded jump dealt no damage. Aim the test at the current enemy; eUseTargetPosition
-	// keeps the flight on the commanded point instead of retargeting to the object
+	// hit_test needs a target_object; eUseTargetPosition keeps the flight on the commanded point
 	CEntityAlive* enemy = const_cast<CEntityAlive*>(m_object->EnemyMan.get_enemy());
 	if (enemy)
 	{

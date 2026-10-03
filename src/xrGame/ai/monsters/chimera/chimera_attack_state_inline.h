@@ -29,8 +29,7 @@ float ChimeraAttackState<Object>::calculate_min_run_distance() const
 
 	float const jump_max_radius = object->com_man().get_jump_control()->get_max_distance();
 
-	// attack_radius above jump range would put a negative value under the sqrt (NaN in release,
-	// where VERIFY is compiled out); clamp h below jump_max_radius
+	// attack_radius above jump range puts a negative under the sqrt (NaN in release, VERIFY compiled out)
 	float const h = _min(attack_radius * sin_half_scan_angle, jump_max_radius * 0.99f);
 
 	VERIFY(h < jump_max_radius);
@@ -208,7 +207,7 @@ bool ChimeraAttackState<Object>::select_target_for_move()
 			}
 		}
 
-		return index < num_scan_points;
+		return index < move_scan_points;
 	}
 }
 
