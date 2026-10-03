@@ -38,6 +38,7 @@
 #include "level_debug.h"
 #include "ai/monsters/BaseMonster/base_monster.h"
 #include "ai/monsters/state_manager.h"
+#include "ai/monsters/monster_cover_manager.h"
 #include "ai/monsters/control_manager_custom.h"
 #include "ai/monsters/chimera/chimera.h"
 #include "ai/monsters/burer/burer.h"
