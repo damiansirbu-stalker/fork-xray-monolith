@@ -249,12 +249,10 @@ _G.CBeforeHitAfterCalcs = function(shit, target, boneId)
 	SendScriptCallback("on_before_hit_after_calcs", shit, target, boneId)
 end
 
--- Monster combat action decision callback (n053)
--- Fired at the head of the shared monster attack selectors. A subscriber sets flags.substate to an
--- EMonsterState id to propose it; the engine selects that substate only if its own start conditions
--- pass, otherwise the vanilla selection runs. flags.substate left -1 = no proposal = exact vanilla.
--- A proposed substate's own check_start_conditions runs EVERY tick while proposing and is not free
--- (the camp state runs a cover search) - propose only when you mean it, stay at -1 otherwise.
+-- Monster combat action decision callback, fired at the head of the shared monster attack selectors.
+-- A subscriber sets flags.substate to an EMonsterState id; the engine selects it only if its own
+-- start conditions pass, else the vanilla selection runs. Left at -1 = no proposal = exact vanilla.
+-- A proposed substate's check_start_conditions runs every selector tick (camp runs a cover search).
 AddScriptCallback("monster_on_combat_action")
 _G.CMonsterCombatAction = function(monster, enemy, dist, danger_type, can_jump)
 	local flags = { substate = -1 }
