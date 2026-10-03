@@ -910,9 +910,8 @@ bool CBaseMonster::check_start_conditions(ControlCom::EControlType type)
 	{
 		EMonsterState state = StateMan->get_state_type();
 
-		if (!is_state(state, eStateAttack_Run) &&
-			!is_state(state, eStateAttack_Melee) &&
-			!is_state(state, eStateAttack_RunAttack))
+		// whole attack family: species with flat attack ladders (chimera) never report the generic substates
+		if (!is_state(state, eStateAttack))
 		{
 			return false;
 		}
