@@ -404,12 +404,13 @@ public:
 
 	void set_aggressive(bool val = true) { m_bAggressive = val; }
 
-	// script-set multiplier on the base-path heading speed; 1 = vanilla
-	float m_turn_speed_factor = 1.f;
-	float get_turn_speed_factor() const { return m_turn_speed_factor; }
-	void set_turn_speed_factor(float v)
+	// rear-strike facing threshold (radians): the melee spin-strike fires when the enemy sits
+	// beyond this angle off the front. 2.8798 = the GSC 165 deg default (a ~30 deg dead-rear wedge)
+	float m_melee_face_eps = 2.8798f;
+	float get_melee_face_eps() const { return m_melee_face_eps; }
+	void set_melee_face_eps(float eps_rad)
 	{
-		if (v > 0.f) m_turn_speed_factor = v;
+		if (eps_rad > 0.f) m_melee_face_eps = eps_rad;
 	}
 
 	//---------------------------------------------------------------------------------------

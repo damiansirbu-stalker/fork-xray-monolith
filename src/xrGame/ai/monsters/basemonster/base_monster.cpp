@@ -910,10 +910,24 @@ bool CBaseMonster::check_start_conditions(ControlCom::EControlType type)
 	{
 		EMonsterState state = StateMan->get_state_type();
 
-		// whole attack family: species with flat attack ladders (chimera) never report the generic substates
-		if (!is_state(state, eStateAttack))
+		if (m_com_manager.has_melee_strike())
 		{
-			return false;
+			// armed by a script: accept the whole attack family, so a flat-ladder species
+			// (chimera) that reports only the top-level eStateAttack can spin-strike
+			if (!is_state(state, eStateAttack))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			// default: GSC's exact gate, so an unarmed monster stays byte-identical to vanilla
+			if (!is_state(state, eStateAttack_Run) &&
+				!is_state(state, eStateAttack_Melee) &&
+				!is_state(state, eStateAttack_RunAttack))
+			{
+				return false;
+			}
 		}
 	}
 
