@@ -818,6 +818,14 @@
         // CBaseMonster - rear-strike lever. Default = exact vanilla; not serialized, re-apply on net_spawn.
         void set_monster_melee_strike(string anim_left, string anim_right, float rear_arc_deg) // Arms the dormant rear-strike component (CControlMeleeJump, registered for every species but inert without motions): with the enemy in the rear cone under 4m the monster spin-strikes left or right, rate-limited 500-1000ms. rear_arc_deg sizes that cone (the enemy must sit beyond 180 - arc/2 degrees off the front); <= 0 keeps 120. Pass the model's own strike motions; an unknown motion name stays invalid and the component keeps refusing. Damage comes from the motions' attack_params rows - a motion without a row deals the first row's numbers, so supply motions that have rows.
 
+        // CBaseMonster - combat-param setters, second family. Neutral per-object levers over params loaded once from LTX.
+        // A negative argument keeps the current value. Not serialized - re-apply on net_spawn. No-op + error log on a non-matching class.
+        void set_monster_attack_on_move_params(float max_go_close_time, float far_radius, float prepare_radius, float prepare_time, float attack_radius, float update_side_period, float prediction_factor) // The attack-on-move circle geometry and side-flip cadence (times in seconds, read per attack tick). Geometry only - the enabled switch stays config-owned.
+        void set_monster_run_attack_params(float min_dist, float max_dist, float min_delay_ms, float max_delay_ms) // CControlRunAttack distance band and re-arm delay roll. Errors when the species carries no run-attack component.
+        void set_monster_jump_flags(bool auto_aim, bool prepare_in_move, bool ground_skip, float auto_aim_factor) // Script-forced jump flags, OR'd onto every jump's own flag fill at activation - auto_aim steers the glide onto a moving target, prepare_in_move winds up in motion (engages only where the species has the motion), ground_skip drops the landing animation. auto_aim_factor >= 0 writes the air-control gain the steering reads; configs ship it 0, so the flag alone steers nothing - set both. Negative keeps the loaded gain. All false + negative = vanilla. Never clears an engine-set flag.
+        void set_monster_aura_params(string aura_name, float linear, float quadratic, float max_power, float max_distance) // One monster aura by name: psy, radiation, fire or base. Writes the falloff pair, power cap and range the aura's calculate() reads live. Error log on an unknown name.
+        void set_bloodsucker_vis_timing(float min_delay_ms) // Bloodsucker only. The minimum delay between visibility-state changes (the predator flicker pacing).
+
         // Stalker NPCs
         function get_enable_anomalies_pathfinding()
         function set_enable_anomalies_pathfinding(bool)
