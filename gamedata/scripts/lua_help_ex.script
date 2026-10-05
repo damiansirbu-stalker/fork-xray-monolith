@@ -826,6 +826,11 @@
         void set_monster_aura_params(string aura_name, float linear, float quadratic, float max_power, float max_distance) // One monster aura by name: psy, radiation, fire or base. Writes the falloff pair, power cap and range the aura's calculate() reads live. Error log on an unknown name.
         void set_bloodsucker_vis_timing(float min_delay_ms) // Bloodsucker only. The minimum delay between visibility-state changes (the predator flicker pacing).
 
+        // CBaseMonster - FSM memory readers. Report what the monster currently believes, distinct from live ground truth off the enemy game_object.
+        MonsterEnemyInfo get_monster_enemy_info() // The EnemyMan record: enemy game_object (nil when none), last-seen position and vertex (the monster's cached belief, diverges from the live object while the enemy is unseen), time_last_seen (ms), enemies_count (remembered, not live-visible), my_vertex_enemy_last_seen + enemy_vertex_enemy_last_seen. Empty record on a non-monster.
+        MonsterHomeInfo get_monster_home_info() // The CMonsterHome record: point (home anchor), radius_min/mid/max, aggressive, has_home, at_home. has_home false = no home set. Empty record on a non-monster.
+        // get_monster_hit_info gains .position (last hit world pos) + .count (remembered hits); get_sound_info gains .type (TSoundDangerValue) + .count (remembered sounds).
+
         // Stalker NPCs
         function get_enable_anomalies_pathfinding()
         function set_enable_anomalies_pathfinding(bool)
