@@ -21,6 +21,9 @@
 
 const u32 need_look_back_time_interval = 2000;
 
+// on: NPCs use their own torso idle_0 instead of the player's safemode idle_1 (cvar npc_relaxed_idle_split, default off = vanilla)
+BOOL g_npc_relaxed_idle_split = FALSE;
+
 MotionID CStalkerAnimationManager::aim_animation(const u32& slot, const xr_vector<CAniVector>& animation,
                                                  const u32& index) const
 {
@@ -87,7 +90,7 @@ MotionID CStalkerAnimationManager::no_object_animation(const EBodyState& body_st
 		);
 
 		if (standing())
-			return (animation[9].A[1]);
+			return (animation[9].A[g_npc_relaxed_idle_split ? 0 : 1]);
 
 		return (animation[7 + movement.movement_type()].A[1]);
 	}
@@ -163,7 +166,7 @@ MotionID CStalkerAnimationManager::unknown_object_animation(u32 slot, const EBod
 		);
 
 		if (standing())
-			return (animation[9].A[1]);
+			return (animation[9].A[g_npc_relaxed_idle_split ? 0 : 1]);
 
 		return (animation[7 + movement.movement_type()].A[1]);
 	}

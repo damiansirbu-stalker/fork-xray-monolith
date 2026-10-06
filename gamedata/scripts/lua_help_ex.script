@@ -22,7 +22,9 @@
         scale_hud_motion_marks_by_speed [1; 0] // flag to scale motion marks by speed, default is on
 
         telekinetic_objects_include_corpses [0; 1] // Enable the ability for poltergeists and burers to throw corpses
-        
+
+        npc_relaxed_idle_split [0; 1] // NPCs use their own torso idle (idle_0) instead of the player's safemode pose (idle_1), so an animation pack's NPC idle plays while the player keeps the safemode loop, default 0 = vanilla
+
         sds_enable [0; 1] // Enable shader based scopes
         sds_speed_enable [0; 1] // Enable mouse sensitivity change on zooming
         sds_zoom_enable [0; 1] // Enable correction of max. zoom with scope_factor, if this option is enabled then max. zoom will be such as prescribed in settings regardless of scope_factor value, if this option is disabled then max. zoom will be sum of value prescribed in settings and the increase that gives scope_factor.
